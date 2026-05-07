@@ -114,14 +114,28 @@ async function createCharacterSection(characterName){
 
   // 見出し
   const title = document.createElement("h2");
-  title.textContent = characterName;
+  title.textContent = "▶ " + characterName;
+  title.style.cursor = "pointer";
   app.appendChild(title);
 
   // グリッド
   const grid = document.createElement("div");
   grid.className = "icon-grid";
   app.appendChild(grid);
+  grid.style.display = "none";
 
+  // クリックイベント
+  title.onclick = () => {
+  
+    if(grid.style.display === "none"){  
+      grid.style.display = "flex";  
+      title.textContent =　   "▼ " + characterName;  
+    }else{
+        grid.style.display = "none";
+        title.textContent =  "▶ " + characterName;
+      }
+    };
+  
   // フォルダ内画像取得
   const response = await fetch(
     `https://api.github.com/repos/${USER_NAME}/${REPO_NAME}/contents/icons/${characterName}`
