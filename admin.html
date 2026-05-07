@@ -66,6 +66,16 @@ button:hover{
   background:#357bd8;
 }
 
+#dropArea{
+  margin-top:20px;
+  padding:30px;
+  border:2px dashed #666;
+  border-radius:12px;
+  text-align:center;
+  background:#2a2a2a;
+  transition:0.2s;
+}
+
 </style>
 </head>
 
@@ -95,8 +105,16 @@ button:hover{
     accept="image/*"
   >
 
-  <div class="preview">
-    <img id="previewImage">
+  <div id="dropArea">
+
+    ここに画像をドラッグ！
+
+    <div class="preview">
+
+      <img id="previewImage">
+
+    </div>
+
   </div>
 
   <button onclick="generatePath()">
@@ -117,20 +135,85 @@ const imageInput =
 const previewImage =
   document.getElementById("previewImage");
 
+const dropArea =
+  document.getElementById("dropArea");
+
+let selectedFile = null;
+
+// =========================
+// ファイル選択
+// =========================
+
 imageInput.addEventListener("change", () => {
 
-  const file = imageInput.files[0];
+  const file =
+    imageInput.files[0];
+
+  loadPreview(file);
+
+});
+
+// =========================
+// ドラッグ中
+// =========================
+
+dropArea.addEventListener("dragover", (event) => {
+
+  event.preventDefault();
+
+  dropArea.style.borderColor = "#4a90e2";
+
+});
+
+// =========================
+// ドラッグ離脱
+// =========================
+
+dropArea.addEventListener("dragleave", () => {
+
+  dropArea.style.borderColor = "#666";
+
+});
+
+// =========================
+// ドロップ
+// =========================
+
+dropArea.addEventListener("drop", (event) => {
+
+  event.preventDefault();
+
+  dropArea.style.borderColor = "#666";
+
+  const file =
+    event.dataTransfer.files[0];
+
+  loadPreview(file);
+
+});
+
+// =========================
+// プレビュー表示
+// =========================
+
+function loadPreview(file){
 
   if(!file){
     return;
   }
+
+  selectedFile = file;
 
   const imageUrl =
     URL.createObjectURL(file);
 
   previewImage.src = imageUrl;
 
-});
+}
+
+// =========================
+// パス生成
+// =========================
 
 function generatePath(){
 
@@ -138,7 +221,7 @@ function generatePath(){
     document.getElementById("characterName").value;
 
   const file =
-    imageInput.files[0];
+    selectedFile;
 
   if(!characterName || !file){
 
@@ -164,4 +247,4 @@ function generatePath(){
 </script>
 
 </body>
-</html>  
+</html>
