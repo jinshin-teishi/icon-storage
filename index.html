@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>Icon Storage</title>
+
+  <style>
+
+    body{
+      background:#222;
+      color:white;
+      font-family:sans-serif;
+      padding:20px;
+    }
+
+    h1{
+      margin-bottom:40px;
+    }
+
+    h2{
+      border-left:5px solid #888;
+      padding-left:10px;
+      margin-top:40px;
+    }
+
+    .icon-grid{
+      display:flex;
+      flex-wrap:wrap;
+      gap:16px;
+    }
+
+    .icon-card{
+      background:#333;
+      padding:10px;
+      border-radius:10px;
+      text-align:center;
+      transition:0.2s;
+    }
+
+    .icon-card:hover{
+      transform:scale(1.03);
+    }
+
+    .icon-card img{
+      width:128px;
+      height:128px;
+      object-fit:cover;
+      border-radius:8px;
+      cursor:pointer;
+    }
+
+    .file-name{
+      margin-top:8px;
+      font-size:12px;
+      color:#aaa;
+      word-break:break-all;
+      width:128px;
+    }
+
+  </style>
+</head>
+
+<body>
+
+<h1>Icon Storage</h1>
+
+<!-- ミミヤ -->
+<h2>ミミヤ</h2>
+
+<div class="icon-grid">
+
+  <div class="icon-card">
+
+    <img
+      src="icons/mimiya/normal.png"
+      onclick="copyUrl(this.src)"
+    >
+
+    <div class="file-name">
+      normal.png
+    </div>
+
+  </div>
+
+  <div class="icon-card">
+
+    <img
+      src="icons/mimiya/battle.png"
+      onclick="copyUrl(this.src)"
+    >
+
+    <div class="file-name">
+      battle.png
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- アリシア -->
+<h2>アリシア</h2>
+
+<div class="icon-grid">
+
+  <div class="icon-card">
+
+    <img
+      src="icons/alicia/normal.png"
+      onclick="copyUrl(this.src)"
+    >
+
+    <div class="file-name">
+      normal.png
+    </div>
+
+  </div>
+
+</div>
+
+
+<script>
+
+function copyUrl(url){
+
+  navigator.clipboard.writeText(url);
+
+  alert("URLをコピーしました！\n\n" + url);
+
+}
+
+</script>
+
+</body>
+</html>
