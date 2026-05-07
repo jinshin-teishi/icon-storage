@@ -86,7 +86,6 @@ async function loadCharacters(){
 
   const response = await fetch(
     `https://api.github.com/repos/${USER_NAME}/${REPO_NAME}/contents/icons`
-//    `https://api.github.com/repos/${USER_NAME}/${REPO_NAME}/contents`
   );
 
   const folders = await response.json();
@@ -119,7 +118,6 @@ async function createCharacterSection(characterName){
   // フォルダ内画像取得
   const response = await fetch(
     `https://api.github.com/repos/${USER_NAME}/${REPO_NAME}/contents/icons/${characterName}`
- //   `https://api.github.com/repos/${USER_NAME}/${REPO_NAME}/contents/${characterName}`
   );
 
   const files = await response.json();
