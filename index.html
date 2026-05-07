@@ -1,131 +1,160 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <title>Icon Storage</title>
+<meta charset="UTF-8">
+<title>Icon Storage</title>
 
-  <style>
+<style>
 
-    body{
-      background:#222;
-      color:white;
-      font-family:sans-serif;
-      padding:20px;
-    }
+body{
+  background:#222;
+  color:white;
+  font-family:sans-serif;
+  padding:20px;
+}
 
-    h1{
-      margin-bottom:40px;
-    }
+h1{
+  margin-bottom:40px;
+}
 
-    h2{
-      border-left:5px solid #888;
-      padding-left:10px;
-      margin-top:40px;
-    }
+h2{
+  border-left:5px solid #888;
+  padding-left:10px;
+  margin-top:40px;
+}
 
-    .icon-grid{
-      display:flex;
-      flex-wrap:wrap;
-      gap:16px;
-    }
+.icon-grid{
+  display:flex;
+  flex-wrap:wrap;
+  gap:16px;
+}
 
-    .icon-card{
-      background:#333;
-      padding:10px;
-      border-radius:10px;
-      text-align:center;
-      transition:0.2s;
-    }
+.icon-card{
+  background:#333;
+  padding:10px;
+  border-radius:10px;
+  text-align:center;
+  transition:0.2s;
+}
 
-    .icon-card:hover{
-      transform:scale(1.03);
-    }
+.icon-card:hover{
+  transform:scale(1.03);
+}
 
-    .icon-card img{
-      width:128px;
-      height:128px;
-      object-fit:cover;
-      border-radius:8px;
-      cursor:pointer;
-    }
+.icon-card img{
+  width:128px;
+  height:128px;
+  object-fit:cover;
+  border-radius:8px;
+  cursor:pointer;
+}
 
-    .file-name{
-      margin-top:8px;
-      font-size:12px;
-      color:#aaa;
-      word-break:break-all;
-      width:128px;
-    }
+.file-name{
+  margin-top:8px;
+  font-size:12px;
+  color:#aaa;
+  width:128px;
+  word-break:break-all;
+}
 
-  </style>
+</style>
 </head>
 
 <body>
 
 <h1>Icon Storage</h1>
 
-<!-- ミミヤ -->
-<h2>ミミヤ</h2>
-
-<div class="icon-grid">
-
-  <div class="icon-card">
-
-    <img
-      src="icons/mimiya/normal.png"
-      onclick="copyUrl(this.src)"
-    >
-
-    <div class="file-name">
-      normal.png
-    </div>
-
-  </div>
-
-  <div class="icon-card">
-
-    <img
-      src="icons/mimiya/battle.png"
-      onclick="copyUrl(this.src)"
-    >
-
-    <div class="file-name">
-      battle.png
-    </div>
-
-  </div>
-
-</div>
-
-
-<!-- アリシア -->
-<h2>アリシア</h2>
-
-<div class="icon-grid">
-
-  <div class="icon-card">
-
-    <img
-      src="icons/alicia/normal.png"
-      onclick="copyUrl(this.src)"
-    >
-
-    <div class="file-name">
-      normal.png
-    </div>
-
-  </div>
-
-</div>
-
+<div id="app"></div>
 
 <script>
 
-function copyUrl(url){
+// ========================
+// 設定
+// ========================
 
-  navigator.clipboard.writeText(url);
+const USER_NAME = "ここにGitHubユーザー名";
+const REPO_NAME = "ここにRepository名";
 
-  alert("URLをコピーしました！\n\n" + url);
+// ========================
+
+const app = document.getElementById("app");
+
+// iconsフォルダ取得
+loadCharacters();
+
+async function loadCharacters(){
+
+  const response = await fetch(
+    `https://api.github.com/repos/${USER_NAME}/${REPO_NAME}/contents/icons`
+  );
+
+  const folders = await response.json();
+
+  for(const folder of folders){
+
+    // フォルダだけ対象
+    if(folder.type !== "dir"){
+      continue;
+    }
+
+    createCharacterSection(folder.name);
+
+  }
+
+}
+
+async function createCharacterSection(characterName){
+
+  // 見出し
+  const title = document.createElement("h2");
+  title.textContent = characterName;
+  app.appendChild(title);
+
+  // グリッド
+  const grid = document.createElement("div");
+  grid.className = "icon-grid";
+  app.appendChild(grid);
+
+  // フォルダ内画像取得
+  const response = await fetch(
+    `https://api.github.com/repos/${USER_NAME}/${REPO_NAME}/contents/icons/${characterName}`
+  );
+
+  const files = await response.json();
+
+  for(const file of files){
+
+    if(file.type !== "file"){
+      continue;
+    }
+
+    createIconCard(grid, file);
+
+  }
+
+}
+
+function createIconCard(grid, file){
+
+  const card = document.createElement("div");
+  card.className = "icon-card";
+
+  card.innerHTML = `
+    <img src="${file.download_url}">
+    <div class="file-name">${file.name}</div>
+  `;
+
+  const img = card.querySelector("img");
+
+  img.onclick = () => {
+
+    navigator.clipboard.writeText(file.download_url);
+
+    alert("URLをコピーしました！\n\n" + file.download_url);
+
+  };
+
+  grid.appendChild(card);
 
 }
 
