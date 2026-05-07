@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Icon Admin</title>
+
+<style>
+
+body{
+  background:#222;
+  color:white;
+  font-family:sans-serif;
+  padding:20px;
+}
+
+h1{
+  margin-bottom:30px;
+}
+
+.section{
+  background:#333;
+  padding:20px;
+  border-radius:12px;
+  margin-bottom:20px;
+}
+
+input{
+  padding:10px;
+  border:none;
+  border-radius:8px;
+  margin-top:8px;
+  width:300px;
+}
+
+.preview{
+  margin-top:20px;
+}
+
+.preview img{
+  width:128px;
+  height:128px;
+  object-fit:cover;
+  border-radius:8px;
+  border:2px solid #555;
+}
+
+.output{
+  margin-top:20px;
+  background:#111;
+  padding:15px;
+  border-radius:8px;
+  word-break:break-all;
+}
+
+button{
+  margin-top:20px;
+  padding:10px 20px;
+  border:none;
+  border-radius:8px;
+  background:#4a90e2;
+  color:white;
+  cursor:pointer;
+}
+
+button:hover{
+  background:#357bd8;
+}
+
+</style>
+</head>
+
+<body>
+
+<h1>Icon Admin</h1>
+
+<div class="section">
+
+  <div>
+    キャラクター名
+  </div>
+
+  <input
+    type="text"
+    id="characterName"
+    placeholder="mimiya"
+  >
+
+  <div style="margin-top:20px;">
+    画像選択
+  </div>
+
+  <input
+    type="file"
+    id="imageInput"
+    accept="image/*"
+  >
+
+  <div class="preview">
+    <img id="previewImage">
+  </div>
+
+  <button onclick="generatePath()">
+    パス生成
+  </button>
+
+  <div class="output" id="output">
+    ここに保存先パスが表示されます
+  </div>
+
+</div>
+
+<script>
+
+const imageInput =
+  document.getElementById("imageInput");
+
+const previewImage =
+  document.getElementById("previewImage");
+
+imageInput.addEventListener("change", () => {
+
+  const file = imageInput.files[0];
+
+  if(!file){
+    return;
+  }
+
+  const imageUrl =
+    URL.createObjectURL(file);
+
+  previewImage.src = imageUrl;
+
+});
+
+function generatePath(){
+
+  const characterName =
+    document.getElementById("characterName").value;
+
+  const file =
+    imageInput.files[0];
+
+  if(!characterName || !file){
+
+    alert("キャラ名と画像を入力してください");
+
+    return;
+
+  }
+
+  const output =
+    document.getElementById("output");
+
+  const savePath =
+    `icons/${characterName}/${file.name}`;
+
+  output.innerHTML = `
+    保存先：<br><br>
+    ${savePath}
+  `;
+
+}
+
+</script>
+
+</body>
+</html>  
